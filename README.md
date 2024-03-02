@@ -21,12 +21,20 @@ openssl ecparam -genkey -name secp384r1 -out tls.key
 openssl req -new -x509 -sha256 -key tls.key -out tls.crt -days 3650 -subj "/O=a-h/CN=use-k8s-secret"
 ```
 
-### k8s-create-secret
+### k8s-create-tls-secret
 
 When mounted into a volume, k8s TLS secrets are always called `tls.crt` and `tls.key` regardless of what filename you use here.
 
 ```bash
 kubectl create secret tls tls-secret --cert=tls.crt --key=tls.key --namespace=use-k8s-secret
+```
+
+### k8s-create-files-secret
+
+When mounted, we'll have a file called `secretfile1` on disk, containing the contents of `./secretfile1` in the repo.
+
+```bash
+kubectl create secret generic --namespace=use-k8s-secret "files-secret" --from-file=secretfile1=secretfile1
 ```
 
 ### k8s-apply

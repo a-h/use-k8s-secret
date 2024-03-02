@@ -14,10 +14,24 @@ spec:
       labels:
         app: use-k8s-secret
     spec:
+      volumes:
+      - name: tls-secret-volume
+        secret:
+          secretName: tls-secret
       containers:
       - name: use-k8s-secret
         image: use-k8s-secret:latest
         # Use the local built image.
         imagePullPolicy: Never
+        # Mount the secret.
+        volumeMounts:
+        - name: tls-secret-volume
+          readOnly: true
+          mountPath: "/etc/tls-secret-volume"
         ports:
-        - containerPort: 8080
+        - containerPort: 8443
+        env:
+        - name: CERT_FILE
+          value: "/etc/tls-secret-volume/tls.crt"
+        - name: KEY_FILE
+          value: "/etc/tls-secret-volume/tls.key"

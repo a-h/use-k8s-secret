@@ -1,0 +1,40 @@
+# use-k8s-secret
+
+## Tasks
+
+### docker-build
+
+```bash
+docker build -t use-k8s-secret:latest .
+```
+
+### k8s-namespace-create
+
+```bash
+kubectl namespace create use-k8s-secret
+```
+
+### create-tls-cert
+
+```bash
+openssl ecparam -genkey -name secp384r1 -out tls.key
+openssl req -new -x509 -sha256 -key tls.key -out tls.cert -days 3650 -subj "/O=a-h/CN=use-k8s-secret"
+```
+
+### k8s-create-secret
+
+```bash
+kubectl create secret tls tls-secret --cert=tls.cert --key=tls.key --namespace=use-k8s-secret
+```
+
+### k8s-apply
+
+```bash
+kubectl apply -f deployment.yaml -f service.yaml --namespace=use-k8s-secret
+```
+
+### k8s-get-services
+
+```bash
+kubectl get services --namespace=use-k8s-secret
+```

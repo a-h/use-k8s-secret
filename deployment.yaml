@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: use-k8s-secret
+  labels:
+    app: use-k8s-secret
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: use-k8s-secret
+  template:
+    metadata:
+      labels:
+        app: use-k8s-secret
+    spec:
+      containers:
+      - name: use-k8s-secret
+        image: use-k8s-secret:latest
+        # Use the local built image.
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080

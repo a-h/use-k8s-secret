@@ -1,0 +1,3 @@
+use-k8s-secret
+tls.cert
+tls.key
